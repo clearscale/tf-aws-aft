@@ -1,5 +1,5 @@
 module "aft" {
-  source  = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git"
+  source  = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git?ref=1.11.1"
 
   ct_management_account_id                = local.account_master.id
   ct_home_region                          = local.account_master.region
