@@ -133,7 +133,7 @@ variable "region" {
 
 variable "name" {
   type        = string
-  description = "(Optional). The name of the S3 state."
+  description = "(Optional). The name of the AFT deployment."
   default     = "default"
 }
 
