@@ -1,13 +1,27 @@
 # tf-aws-aft
+---
 
 This is a repository to help the deployment of AWS Account Factory for Terraform.
+
+## Overview
+
+AWS Account structure
+
+- **Control Tower Management Account** - An AWS account dedicated for your AWS Control Tower service. This account also typically referred to AWS payer account and AWS Organizations Management account.
+- **AFT Management Account** - An AWS account dedicated for AFT management operations. This is different from organization's management account.
+- **Vended Account** - An AWS account provisioned by AWS Control Tower, which contains all baseline and guardrails that you selected. AFT uses AWS Control Tower to vend a new account.
+
+
+![image info](./doc/images/aft.png)
+
+https://catalog.workshops.aws/control-tower/en-US/customization/aft
+
 
 ## Prerequistes
 
 #### 1. Setup AWS Organizations
 
 Enroll Management account into AWS Organziations via console.
-
 
 
 #### 2. Setup AWS Control Tower
@@ -31,26 +45,7 @@ Setup AWS Control Tower via console. Follow prompts for the following informatio
 - IAM Identity Center
 - Log configuration for S3
 - CloudTrail configuration
-- KMS Encryption 
-
-
-#### 3. KMS Setup
-
-Requirements for KMS key
-
-Key type: Symmetric
-Key spec: SYMMETRIC_DEFAULT
-Key usage: Encrypt and decrypt
-Origin: AWS KMS
-Regionality: Single-Region key
-
-https://docs.aws.amazon.com/controltower/latest/userguide/configure-kms-keys.html
-
-
-
-
-
-
+- KMS Encryption (see notes below)
 
 
 ## Setup
@@ -127,27 +122,36 @@ module "aft" {
 }
 ```
 
+see the `examples/simple` for an example of using the module.
 
-see the `examples/simple` for an example of using the module s
-
-
-
+This terraform must be executed against the Control Tower Management account, not AFT account.
 
 
+#### 3. Setup Github connections
 
+#### 4. Setup Service Catalog
 
-Deployment prerequisites
+Allow IAM role to access Service Catalog for AWS Control Tower
 
-Before you configure and launch your AFT environment, you must have the following:
+In Control Tower Management Account
+- Navigate to Service Catalog (service)
+- Navigate to Administration > Portfolios
+- Open "AWS Control Tower Account Factory Portfolio"
+- Click on "Access" tab
+- Grant access
+- Leave the default of IAM Principal (this will search in the current account)
+- Below, select "Roles"
+- Find the "AWSAFTExecution" for this account
 
+![image info](./doc/images/service-catalog.png)
 
-
+See also `example/service-catalog` for a terraform example
 
 
 
 ## See also
 
-- https://docs.aws.amazon.com/controltower/latest/userguide/taf-account-provisioning.html
+https://docs.aws.amazon.com/controltower/latest/userguide/taf-account-provisioning.html
 
 https://docs.aws.amazon.com/en_us/controltower/latest/userguide//sso-groups.html
 
@@ -183,3 +187,15 @@ IAM Identity Center guidance
 Account factory guidance
 
     When you use account factory to provision new accounts in AWS Service Catalog, do not define TagOptions, enable notifications, or create a provisioned product plan. Doing so can result in a failure to provision a new account.
+
+
+#### KMS Setup
+
+Requirements for KMS key
+- Key type: Symmetric
+- Key spec: SYMMETRIC_DEFAULT
+- Key usage: Encrypt and decrypt
+- Origin: AWS KMS
+- Regionality: Single-Region key
+
+https://docs.aws.amazon.com/controltower/latest/userguide/configure-kms-keys.html
