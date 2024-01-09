@@ -21,14 +21,12 @@ module "aft" {
   vpc_public_subnet_02_cidr  = "192.168.2.128/25"
 
   vcs_provider                           = "github"
-  repo_accounts                          = "https://github.com/clearscale/tf-aws-aft-accounts"
+  repo_accounts                          = "clearscale/tf-aws-aft-accounts"
   repo_branch_accounts                   = "main"
-  repo_aft_framework                     = "https://github.com/aws-ia/terraform-aws-control_tower_account_factory.git"
-  repo_branch_aft_framework              = "main"
-  repo_customization_account             = "https://github.com/clearscale/tf-aws-aft-customization-account"
+  repo_customization_account             = "clearscale/tf-aws-aft-customization-account"
   repo_branch_customization_account      = "main"
-  repo_customization_global              = "https://github.com/clearscale/tf-aws-aft-customization-global"
+  repo_customization_global              = "clearscale/tf-aws-aft-customization-global"
   repo_branch_customization_global       = "main"
-  repo_customization_provisioning        = "https://github.com/clearscale/tf-aws-aft-customization-account-provisioning"
+  repo_customization_provisioning        = "clearscale/tf-aws-aft-customization-account-provisioning"
   repo_branch_customization_provisioning = "main"
 }
