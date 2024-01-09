@@ -89,23 +89,41 @@ locals {
   )
 }
 
-variable "prefix" {
+# variable "prefix" {
+#   type        = string
+#   description = "(Optional). Prefix override for all generated naming conventions."
+#   default     = "cs"
+# }
+
+# variable "client" {
+#   type        = string
+#   description = "(Optional). Name of the client."
+#   default     = "ClearScale"
+# }
+
+# variable "project" {
+#   type        = string
+#   description = "(Optional). Name of the client project."
+#   default     = "pmod"
+# }
+
+# variable "env" {
+#   type        = string
+#   description = "(Optional). Name of the current environment."
+#   default     = "dev"
+# }
+
+variable "region" {
   type        = string
-  description = "(Optional). Prefix override for all generated naming conventions."
-  default     = "cs"
+  description = "(Optional). AWS region."
+  default     = "us-west-1"
 }
 
-variable "client" {
-  type        = string
-  description = "(Optional). Name of the client."
-  default     = "ClearScale"
-}
-
-variable "project" {
-  type        = string
-  description = "(Optional). Name of the client project."
-  default     = "pmod"
-}
+# variable "name" {
+#   type        = string
+#   description = "(Optional). The name of the AFT deployment."
+#   default     = "default"
+# }
 
 variable "accounts" {
   description = "(Optional). List of cloud provider account info and backend type."
@@ -117,24 +135,6 @@ variable "accounts" {
     region   = optional(string, "us-west-1")
     backend  = optional(string, "s3")
   }))
-}
-
-variable "env" {
-  type        = string
-  description = "(Optional). Name of the current environment."
-  default     = "dev"
-}
-
-variable "region" {
-  type        = string
-  description = "(Optional). AWS region."
-  default     = "us-west-1"
-}
-
-variable "name" {
-  type        = string
-  description = "(Optional). The name of the AFT deployment."
-  default     = "default"
 }
 
 #
