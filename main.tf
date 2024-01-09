@@ -32,7 +32,7 @@ module "aft" {
   aft_vpc_public_subnet_02_cidr           = var.vpc_public_subnet_02_cidr
 
   # VCS provider which is automatically determined by repo urls.
-  vcs_provider          = local.vcs_provider
+  vcs_provider          = var.vcs_provider
   github_enterprise_url = var.vcs_github_enterprise_url
 
   # https://github.com/aws-ia/terraform-aws-control_tower_account_factory

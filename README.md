@@ -129,6 +129,20 @@ This terraform must be executed against the Control Tower Management account, no
 
 #### 3. Setup Github connections
 
+If using Github, AWS CodeDeploy needs a connection to Github to monitor changes when new accounts are changed in the aft-accounts request repository.
+
+In Control Tower Management Account
+- Navigate to Developer Tools (under CodeCommit/CodeDeploy)
+- Go to Settings > Connections
+- Update Pending connection
+
+Once complete, the connection will be updated to an Available status
+
+![image info](./doc/images/codestar.png)
+
+More info on AWS Connections:
+https://docs.aws.amazon.com/dtconsole/latest/userguide/welcome-connections.html
+
 #### 4. Setup Service Catalog
 
 Allow IAM role to access Service Catalog for AWS Control Tower
