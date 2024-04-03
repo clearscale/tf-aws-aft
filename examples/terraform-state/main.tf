@@ -1,11 +1,7 @@
 module "terraform_state_backend" {
   source  = "cloudposse/tfstate-backend/aws"
   version = "1.3.0"
-
-  # AWS profile name as set in the shared credentials file
-  # profile = "AWSAdministratorAccess-200928140680"
-  # also set region in profile
-
+  
   namespace   = "clearscale"
   stage       = "terraform"
   name        = "backend"
