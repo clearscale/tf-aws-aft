@@ -3,7 +3,7 @@ variable "accounts" {
   type = list(object({
     key      = optional(string, "current")
     provider = optional(string, "aws")
-    id       = optional(string, "*") 
+    id       = optional(string, "*")
     name     = string
     region   = optional(string, "us-west-1")
     backend  = optional(string, "s3")

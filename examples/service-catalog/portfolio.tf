@@ -9,11 +9,11 @@ data "aws_iam_role" "aft_role" {
 }
 
 module "current_desired_capacity" {
-  source            = "digitickets/cli/aws"
+  source = "digitickets/cli/aws"
 
-  aws_cli_commands  = ["servicecatalog", "list-portfolios"]
-  aws_cli_query     = "PortfolioDetails[?DisplayName==`${var.portfolio_name}`]|[0].Id"
-  region            = var.region
+  aws_cli_commands = ["servicecatalog", "list-portfolios"]
+  aws_cli_query    = "PortfolioDetails[?DisplayName==`${var.portfolio_name}`]|[0].Id"
+  region           = var.region
 }
 
 output "module" {

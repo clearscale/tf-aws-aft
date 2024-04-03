@@ -1,45 +1,45 @@
 locals {
   # Master/Root/Control Tower account
   account_master = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["root", "ct", "controltower", "master"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["root", "ct", "controltower", "master"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["root", "ct", "controltower", "master"], account.key)][0]
     : null
   )
 
   # Log Archive account
   account_logs = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains([
       "log", "logs", "logarchive", "log_archive", "log-archive"
     ], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains([
+    ]) > 0
+    ? [for account in var.accounts : account
+      if contains([
         "log", "logs", "logarchive", "log_archive", "log-archive"
-      ], account.key)][0]
+    ], account.key)][0]
     : null
   )
 
   # Audit account
   account_audit = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["audit"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["audit"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["audit"], account.key)][0]
     : null
   )
 
   # AFT Management account
   account_aft = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["aft", "management"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["aft", "management"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["aft", "management"], account.key)][0]
     : null
   )
 
@@ -50,14 +50,14 @@ locals {
     var.repo_customization_provisioning
   ])
 
-  contains_github    = length(regexall(".*github.com.*",    local.repos_all)) > 0
+  contains_github    = length(regexall(".*github.com.*", local.repos_all)) > 0
   contains_bitbucket = length(regexall(".*bitbucket.org.*", local.repos_all)) > 0
 
   # Determine the VCS provider based on the URL contents
   vcs_provider = ((
     length(trimspace(var.vcs_github_enterprise_url)) > 0 &&
     var.vcs_github_enterprise_url != "null"
-  ) ? "githubenterprise"
+    ) ? "githubenterprise"
     : (local.contains_github
       ? "github"
       : (local.contains_bitbucket
@@ -68,22 +68,22 @@ locals {
   )
 
   # Strip domains and protocols from repo location strings
-  repo_accounts = (var.vcs_provider == "codecommit" 
+  repo_accounts = (var.vcs_provider == "codecommit"
     ? replace(var.repo_accounts, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_accounts, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_global = (var.vcs_provider == "codecommit" 
+  repo_customization_global = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_global, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_global, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_account = (var.vcs_provider == "codecommit" 
+  repo_customization_account = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_account, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_account, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_provisioning = (var.vcs_provider == "codecommit" 
+  repo_customization_provisioning = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_provisioning, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_provisioning, "^(https?://[^/]+/)", "")
   )
@@ -130,7 +130,7 @@ variable "accounts" {
   type = list(object({
     key      = optional(string, "current")
     provider = optional(string, "aws")
-    id       = optional(string, "*") 
+    id       = optional(string, "*")
     name     = string
     region   = optional(string, "us-west-1")
     backend  = optional(string, "s3")
