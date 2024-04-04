@@ -336,6 +336,16 @@ variable "feature_vpc_endpoints" {
 #
 # Networking
 #
+variable "vpc_enable" {
+  type        = bool
+  description = "(Optional). Flag turning use of VPC on/off for AFT. Default is set to false."
+  default     = false
+  validation {
+    condition     = contains([true, false], var.vpc_enable)
+    error_message = "Valid values for var: vpc_enable are (true, false)."
+  }
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "(Optional). CIDR Block to allocate to the AFT VPC"

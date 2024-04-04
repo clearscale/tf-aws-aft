@@ -1,5 +1,5 @@
 module "aft" {
-  source = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git?ref=1.11.1"
+  source = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git?ref=1.12.0"
 
   ct_management_account_id  = local.account_master.id
   ct_home_region            = local.account_master.region
@@ -24,7 +24,8 @@ module "aft" {
   terraform_token             = var.tf_token
   terraform_org_name          = var.tf_org_name
   terraform_api_endpoint      = var.tf_api_endpoint
-
+  
+  aft_enable_vpc                 = var.vpc_enable
   aft_vpc_cidr                   = var.vpc_cidr
   aft_vpc_private_subnet_01_cidr = var.vpc_private_subnet_01_cidr
   aft_vpc_private_subnet_02_cidr = var.vpc_private_subnet_02_cidr
