@@ -1,16 +1,16 @@
 module "aft" {
-  source  = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git?ref=1.11.1"
+  source = "github.com/aws-ia/terraform-aws-control_tower_account_factory.git?ref=1.12.0"
 
-  ct_management_account_id                = local.account_master.id
-  ct_home_region                          = local.account_master.region
-  log_archive_account_id                  = local.account_logs.id
-  audit_account_id                        = local.account_audit.id
-  aft_management_account_id               = local.account_aft.id
+  ct_management_account_id  = local.account_master.id
+  ct_home_region            = local.account_master.region
+  log_archive_account_id    = local.account_logs.id
+  audit_account_id          = local.account_audit.id
+  aft_management_account_id = local.account_aft.id
 
-  cloudwatch_log_group_retention          = 0
-  concurrent_account_factory_actions      = 5
-  maximum_concurrent_customizations       = 5
-  global_codebuild_timeout                = 60
+  cloudwatch_log_group_retention     = 0
+  concurrent_account_factory_actions = 5
+  maximum_concurrent_customizations  = 5
+  global_codebuild_timeout           = 60
 
   aft_feature_enterprise_support          = var.feature_enterprise
   aft_feature_cloudtrail_data_events      = var.feature_audit_cloudtrail
@@ -18,18 +18,19 @@ module "aft" {
   aft_feature_delete_default_vpcs_enabled = var.feature_vpc_delete_default
   aft_vpc_endpoints                       = var.feature_vpc_endpoints
 
-  terraform_version                       = var.tf_version
-  terraform_distribution                  = var.tf_distribution
-  tf_backend_secondary_region             = var.tf_region_backup
-  terraform_token                         = var.tf_token
-  terraform_org_name                      = var.tf_org_name
-  terraform_api_endpoint                  = var.tf_api_endpoint
-
-  aft_vpc_cidr                            = var.vpc_cidr
-  aft_vpc_private_subnet_01_cidr          = var.vpc_private_subnet_01_cidr
-  aft_vpc_private_subnet_02_cidr          = var.vpc_private_subnet_02_cidr
-  aft_vpc_public_subnet_01_cidr           = var.vpc_public_subnet_01_cidr
-  aft_vpc_public_subnet_02_cidr           = var.vpc_public_subnet_02_cidr
+  terraform_version           = var.tf_version
+  terraform_distribution      = var.tf_distribution
+  tf_backend_secondary_region = var.tf_region_backup
+  terraform_token             = var.tf_token
+  terraform_org_name          = var.tf_org_name
+  terraform_api_endpoint      = var.tf_api_endpoint
+  
+  aft_enable_vpc                 = var.vpc_enable
+  aft_vpc_cidr                   = var.vpc_cidr
+  aft_vpc_private_subnet_01_cidr = var.vpc_private_subnet_01_cidr
+  aft_vpc_private_subnet_02_cidr = var.vpc_private_subnet_02_cidr
+  aft_vpc_public_subnet_01_cidr  = var.vpc_public_subnet_01_cidr
+  aft_vpc_public_subnet_02_cidr  = var.vpc_public_subnet_02_cidr
 
   # VCS provider which is automatically determined by repo urls.
   vcs_provider          = var.vcs_provider

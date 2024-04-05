@@ -15,6 +15,7 @@ module "terraform_state_backend" {
   terraform_version                  = "1.5.7"
   force_destroy                      = false
 
+  dynamodb_enabled = false
   # use to destroy
   # terraform_backend_config_file_path = ""
   # force_destroy                      = true

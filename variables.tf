@@ -1,45 +1,45 @@
 locals {
   # Master/Root/Control Tower account
   account_master = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["root", "ct", "controltower", "master"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["root", "ct", "controltower", "master"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["root", "ct", "controltower", "master"], account.key)][0]
     : null
   )
 
   # Log Archive account
   account_logs = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains([
       "log", "logs", "logarchive", "log_archive", "log-archive"
     ], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains([
+    ]) > 0
+    ? [for account in var.accounts : account
+      if contains([
         "log", "logs", "logarchive", "log_archive", "log-archive"
-      ], account.key)][0]
+    ], account.key)][0]
     : null
   )
 
   # Audit account
   account_audit = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["audit"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["audit"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["audit"], account.key)][0]
     : null
   )
 
   # AFT Management account
   account_aft = (length([
-    for account in var.accounts : account 
+    for account in var.accounts : account
     if contains(["aft", "management"], account.key)
-  ]) > 0 
-    ? [for account in var.accounts : account 
-       if contains(["aft", "management"], account.key)][0]
+    ]) > 0
+    ? [for account in var.accounts : account
+    if contains(["aft", "management"], account.key)][0]
     : null
   )
 
@@ -50,14 +50,14 @@ locals {
     var.repo_customization_provisioning
   ])
 
-  contains_github    = length(regexall(".*github.com.*",    local.repos_all)) > 0
+  contains_github    = length(regexall(".*github.com.*", local.repos_all)) > 0
   contains_bitbucket = length(regexall(".*bitbucket.org.*", local.repos_all)) > 0
 
   # Determine the VCS provider based on the URL contents
   vcs_provider = ((
     length(trimspace(var.vcs_github_enterprise_url)) > 0 &&
     var.vcs_github_enterprise_url != "null"
-  ) ? "githubenterprise"
+    ) ? "githubenterprise"
     : (local.contains_github
       ? "github"
       : (local.contains_bitbucket
@@ -68,69 +68,33 @@ locals {
   )
 
   # Strip domains and protocols from repo location strings
-  repo_accounts = (var.vcs_provider == "codecommit" 
+  repo_accounts = (var.vcs_provider == "codecommit"
     ? replace(var.repo_accounts, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_accounts, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_global = (var.vcs_provider == "codecommit" 
+  repo_customization_global = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_global, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_global, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_account = (var.vcs_provider == "codecommit" 
+  repo_customization_account = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_account, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_account, "^(https?://[^/]+/)", "")
   )
 
-  repo_customization_provisioning = (var.vcs_provider == "codecommit" 
+  repo_customization_provisioning = (var.vcs_provider == "codecommit"
     ? replace(var.repo_customization_provisioning, "^(https?://git-codecommit.[^/]+.amazonaws.com/v1/repos/)", "")
     : replace(var.repo_customization_provisioning, "^(https?://[^/]+/)", "")
   )
 }
-
-# variable "prefix" {
-#   type        = string
-#   description = "(Optional). Prefix override for all generated naming conventions."
-#   default     = "cs"
-# }
-
-# variable "client" {
-#   type        = string
-#   description = "(Optional). Name of the client."
-#   default     = "ClearScale"
-# }
-
-# variable "project" {
-#   type        = string
-#   description = "(Optional). Name of the client project."
-#   default     = "pmod"
-# }
-
-# variable "env" {
-#   type        = string
-#   description = "(Optional). Name of the current environment."
-#   default     = "dev"
-# }
-
-variable "region" {
-  type        = string
-  description = "(Optional). AWS region."
-  default     = "us-west-1"
-}
-
-# variable "name" {
-#   type        = string
-#   description = "(Optional). The name of the AFT deployment."
-#   default     = "default"
-# }
 
 variable "accounts" {
   description = "(Optional). List of cloud provider account info and backend type."
   type = list(object({
     key      = optional(string, "current")
     provider = optional(string, "aws")
-    id       = optional(string, "*") 
+    id       = optional(string, "*")
     name     = string
     region   = optional(string, "us-west-1")
     backend  = optional(string, "s3")
@@ -362,7 +326,7 @@ variable "feature_vpc_delete_default" {
 variable "feature_vpc_endpoints" {
   type        = bool
   description = "Flag turning VPC endpoints on/off for AFT VPC"
-  default     = true
+  default     = false
   validation {
     condition     = contains([true, false], var.feature_vpc_endpoints)
     error_message = "Valid values for var: feature_vpc_endpoints are (true, false)."
@@ -372,6 +336,16 @@ variable "feature_vpc_endpoints" {
 #
 # Networking
 #
+variable "vpc_enable" {
+  type        = bool
+  description = "(Optional). Flag turning use of VPC on/off for AFT. Default is set to false."
+  default     = false
+  validation {
+    condition     = contains([true, false], var.vpc_enable)
+    error_message = "Valid values for var: vpc_enable are (true, false)."
+  }
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "(Optional). CIDR Block to allocate to the AFT VPC"
