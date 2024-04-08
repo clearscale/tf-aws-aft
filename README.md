@@ -142,17 +142,45 @@ module "aft" {
 }
 ```
 
-#### 3. Setup Github connections
+#### 3. Setup Github connections (or other 3rd party Git providers)
 
-If using Github, AWS CodeDeploy needs a connection to Github to monitor changes when new accounts are changed in the aft-accounts request repository.
+If the AFT repositories are hosted outside AWS CodeCommit, for instance, on a third-party service like GitHub, AWS CodeDeploy requires a connection to the provider to track changes when new accounts are modified in the [aft-accounts request repository](https://github.com/clearscale/tf-aws-aft-accounts). While the AFT deployment automatically creates the Connection, compatible with multiple providers, it necessitates manual approval.
 
-- In Control Tower Management Account
+- In the [AFT Management Account](https://docs.aws.amazon.com/controltower/latest/userguide/aft-getting-started.html)
   - Navigate to Developer Tools (under CodeCommit/CodeDeploy)
   - Go to Settings > Connections
-  - Update Pending connection
-  - Once complete, the connection will be updated to an Available status
+  - Update Pending connection (see screenshot below)
+  - Provide access to all AFT repositories in the organization.
+      1. Login to GitHub as a GitHub Organization Owner
+      2. [Primary AFT Module](https://github.com/clearscale/tf-aws-aft)
+      3. [Account Definitions](https://github.com/clearscale/tf-aws-aft-accounts)
+      4. [Account Customizations](https://github.com/clearscale/tf-aws-aft-customization-account)
+      5. [Global Account Customizations](https://github.com/clearscale/tf-aws-aft-customization-global)
+      6. [Account Provisioning Customizations](https://github.com/clearscale/tf-aws-aft-customization-account-provisioning)
+ - Once complete, the connection will be updated to an Available status
 
+![image info](./doc/images/codeconnections.png)
 ![image info](./doc/images/codestar.png)
+
+##### Notes:
+
+If you ever need to modify the connection, it's advisable to update the existing connection rather than creating a new one. This is because AFT stores the ARN in the AWS Parameter Store at `/aft/config/vcs/codestar-connection-arn` and will not update the ARN if the connection is deleted and recreated. However, should there be a necessity to update the ARN, you will need to re-run the Step Function `aft-invoke-customizations` in the AFT Management Account. This re-run should be executed with the JSON input provided below for every AWS account that was created with AFT.
+
+```json
+{
+  "include": [
+    {
+      "type": "accounts",
+      "target_value": [
+        "ACCOUNT_ID"
+      ]
+    }
+  ]
+}
+
+```
+
+Ensure to replace "ACCOUNT_ID" with the actual AWS account ID that you intend to update.
 
 More info on AWS Connections:
 https://docs.aws.amazon.com/dtconsole/latest/userguide/welcome-connections.html
