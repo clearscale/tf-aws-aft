@@ -1,5 +1,7 @@
 # Account Factory for Terraform (AFT)
 
+`NOTE:` Version tags directly correlate with the current version of [AFT](https://github.com/aws-ia/terraform-aws-control_tower_account_factory).
+
 This Terraform module is designed to establish and configure the [Account Factory for Terraform (AFT)](https://github.com/aws-ia/terraform-aws-control_tower_account_factory), an official Terraform module curated by the AWS Control Tower team. AFT enables the provisioning and customization of AWS accounts utilizing Terraform, facilitated through a deployment pipeline leveraging AWS CodeBuild and CodePipeline. It is intended to be integrated within your project's Terraform codebase, ensuring the foundational components of AFT are appropriately set up.
 
 ## AFT Overview
